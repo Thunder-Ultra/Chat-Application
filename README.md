@@ -21,3 +21,17 @@ readme maker github
    npm start
    ```
 5. Open your browser and go to `http://localhost:3000` to see the application in action.
+
+## Features
+- Real-time messaging
+- End-to-end encryption
+- User authentication
+- chat rooms
+- chat history
+- Responsive design
+- User-friendly interface
+
+## Technologies Used
+- Node.js
+- Express.js
+- MongoDB
