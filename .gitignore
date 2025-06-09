@@ -1,0 +1,7 @@
+# Node Modules #
+################
+/node_modules
+
+# Node Modules Descriptive List #
+#################################
+package-lock.json
