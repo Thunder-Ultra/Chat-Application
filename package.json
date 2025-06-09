@@ -1,0 +1,30 @@
+{
+  "name": "chat-application",
+  "version": "1.0.0",
+  "description": "An Simple Chat Application with End to End Security",
+  "keywords": [
+    "chat-application"
+  ],
+  "homepage": "https://github.com/Thunder-Ultra/Chat-Application#readme",
+  "bugs": {
+    "url": "https://github.com/Thunder-Ultra/Chat-Application/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thunder-Ultra/Chat-Application.git"
+  },
+  "license": "MIT",
+  "author": "Tuchar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}
