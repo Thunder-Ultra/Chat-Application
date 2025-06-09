@@ -1,6 +1,5 @@
 # Chat-Application
-An Simple Chat Application with End to End Security
-readme maker github
+An Simple Chat Application with End to End Security.
 
 ## How to run the project ?
 
@@ -26,8 +25,8 @@ readme maker github
 - Real-time messaging
 - End-to-end encryption
 - User authentication
-- chat rooms
-- chat history
+- Chat rooms
+- Chat history
 - Responsive design
 - User-friendly interface
 
