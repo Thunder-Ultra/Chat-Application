@@ -19,7 +19,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "node app.js"
+    "test": "ip route && node app.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
