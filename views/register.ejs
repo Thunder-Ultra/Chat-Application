@@ -1,0 +1,32 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Register</title>
+    <link rel="stylesheet" href="/styles/register.css" />
+    <script src="/scripts/register.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Welcome to out Chat Service</h1>
+      <p id="error-display">Passwords are not same!</p>
+      <form>
+        <div class="form-control">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username"/>
+        </div>
+        <div class="form-control">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" />
+        </div>
+        <div class="form-control">
+          <label for="confirm-password">Confirm Pasword</label>
+          <input type="password" id="confirm-password" name="confirm-password" />
+        </div>
+        <button>Register</button>
+      </form>
+      <hr></hr>
+      <p>If already a member! <a href="/login">Login here</a></p>
+    </main>
+  </body>
+</html>

@@ -37,24 +37,32 @@
     <main>
       <h1>Welcome to our chat Application!</h1>
       <ul id="chat-room-list">
+        <% for (let i=0; i<groups.length; i++) { %>
         <li class="chat-room">
-          <a class="chat-room-contents" href="/cluba">
-            <h2 class="chat-room-title">Game Club</h2>
-            <p class="chat-room-desc">A Small Club for gamers</p>
+          <a class="chat-room-contents" href="/chatroom/<%= groups[i]._id %>">
+            <h2 class="chat-room-title"><%= groups[i].name %></h2>
+            <p class="chat-room-desc"><%= groups[i].desc ? groups[i].desc : "No Description Provided"   %></p>
           </a>
         </li>
-        <li class="chat-room">
+        <% } %>
+        <!-- <li class="chat-room">
           <a class="chat-room-contents" href="/chatroom/a">
             <h2 class="chat-room-title">Game Club</h2>
             <p class="chat-room-desc">A Small Club for gamers</p>
           </a>
         </li>
         <li class="chat-room">
-          <a class="chat-room-contents" href="/cluba">
+          <a class="chat-room-contents" href="/chatroom/b">
             <h2 class="chat-room-title">Game Club</h2>
             <p class="chat-room-desc">A Small Club for gamers</p>
           </a>
         </li>
+        <li class="chat-room">
+          <a class="chat-room-contents" href="/chatroom/c">
+            <h2 class="chat-room-title">Game Club</h2>
+            <p class="chat-room-desc">A Small Club for gamers</p>
+          </a>
+        </li> -->
       </ul>
     </main>
   </body>
