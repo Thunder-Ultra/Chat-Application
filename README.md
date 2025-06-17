@@ -1,6 +1,13 @@
 # Chat-Application
 An Simple Chat Application with End to End Security.
 
+
+## TO DO
+- [ ] Implement user authentication
+- [ ] Add chat rooms
+- [ ] Implement chat history
+- [ ] Add responsive design
+
 ## How to run the project ?
 
 1. Clone the repository:
