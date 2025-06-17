@@ -4,10 +4,13 @@ An Simple Chat Application with End to End Security.
 
 ## TO DO
 - [ ] Automatically load messages sent by other users
-- [x] Allow users to create chat rooms
-
-
-
+- [ ] Add Support for link *identification* and preview
+- [ ] Implement simple text formatting (bold, italics, etc)
+- [ ] Allow users to create, customize and delete chat rooms
+- [ ] Allow users to customize their profile (username, dp, etc)
+- [ ] Improve UI/UX
+- [x] Add chat history
+- [x] Implement user authentication
 
 ## How to run the project ?
 
