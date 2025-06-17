@@ -4,6 +4,7 @@ An Simple Chat Application with End to End Security.
 
 ## TO DO
 - [ ] Automatically load messages sent by other users
+- [ ] Allow Roles (Admin, User, etc)
 - [ ] Add Support for link *identification* and preview
 - [ ] Implement simple text formatting (bold, italics, etc)
 - [ ] Allow users to create, customize and delete chat rooms
