@@ -3,6 +3,8 @@ const path = require("path");
 const express = require("express");
 const db = require("./database/data.js");
 const { ObjectId } = require("mongodb");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 // async function test() {
 //   try {
@@ -29,8 +31,31 @@ const app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
+let sessionStorage = new MongoDBStore({
+  uri: "mongodb://127.0.0.1:27017",
+  databaseName: "chat-application",
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  session({
+    secret: "Have fun Developing",
+    saveUninitialized: false,
+    resave: false,
+    store: sessionStorage,
+  })
+);
+
+function checkAuthentication(req, res, next) {
+  if (!req.session.isAuthenticated) {
+    console.log(req.method + req.path + " : Unauthorized Access!!");
+    // console.log(req)
+    return res.send("You Attacker! Go make your own chat app and hack it!");
+    // return res.redirect("/login");
+  }
+  next();
+}
 
 app.get("/", function (req, res) {
   res.redirect("/home");
@@ -48,7 +73,7 @@ app.post("/register", async function (req, res) {
 
   console.log(registrationData);
 
-  // Check if username already exists in database, if no send error
+  // Check if username already exists in database, if yes send error
   try {
     const result = await db
       .getDb()
@@ -101,7 +126,62 @@ app.get("/login", function (req, res) {
   res.render("login");
 });
 
-app.get("/home", async function (req, res) {
+app.post("/login", async function (req, res) {
+  // Get user Entered Data
+  let loginData = req.body;
+  let username = loginData.username;
+  let password = loginData.password;
+
+  let storedUserData;
+  try {
+    storedUserData = await db
+      .getDb()
+      .collection("users")
+      .findOne({ username: username });
+
+    // Check if user name is registered; if not present return error
+    if (!storedUserData) {
+      const result = {
+        error: 1,
+        "error-text": "Invalid Credintials",
+      };
+      return res.status(406).json(result);
+    }
+
+    // Check for password validity; if invalid return error
+    let storedPassword = storedUserData.password;
+    // console.log(storedPassword)
+    // console.log(password)
+    if (storedPassword != password) {
+      const result = {
+        error: 1,
+        "error-text": "Invalid Credintials",
+      };
+      return res.status(406).json(result);
+    }
+  } catch (err) {
+    console.log("post/login : ERROR : Failed getting data from database");
+    console.log(err);
+  }
+
+  // Generate session cookie and save session to database
+  req.session.isAuthenticated = true;
+  req.session.username = storedUserData.username;
+  req.session.userId = storedUserData._id;
+
+  // Send successfull message
+  res.json();
+});
+
+app.get("/logout", function (req, res) {
+  req.session.isAuthenticated = false;
+  delete req.session.username;
+  delete req.session.userId;
+
+  res.redirect("/login");
+});
+
+app.get("/home", checkAuthentication, async function (req, res) {
   let groups;
 
   try {
@@ -111,10 +191,10 @@ app.get("/home", async function (req, res) {
     console.log(err);
   }
 
-  res.render("home", { groups: groups });
+  res.render("home", { groups: groups, username: req.session.username });
 });
 
-app.get("/chatroom/:id", async function (req, res) {
+app.get("/chatroom/:id", checkAuthentication, async function (req, res) {
   let groupId = req.params.id;
   let chats;
 
@@ -146,18 +226,18 @@ app.get("/chatroom/:id", async function (req, res) {
     chats: chats.reverse(),
     groupName: groupName,
     groupId: groupId,
-    userId: new ObjectId("6849a223ee2333b89cc59f36"),
+    userId: req.session.userId,
   });
 });
 
 // Left to add
 // CSRF Protection
 // XSS Protection
-app.post("/chatroom/:id", async function (req, res) {
+app.post("/chatroom/:id", checkAuthentication, async function (req, res) {
   let body = await req.body;
 
-  let name = "Tuchar";
-  let userId = new ObjectId("6849a223ee2333b89cc59f36");
+  let name = req.session.username;
+  let userId = req.session.userId;
   let text = body.text;
   let groupId = req.params.id;
 

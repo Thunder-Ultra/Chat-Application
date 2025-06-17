@@ -41,7 +41,7 @@ header {
 
 #logo h1 {
   margin: 0;
-  font-size:2rem;
+  font-size: 2rem;
 }
 
 #action-buttons {
@@ -49,6 +49,15 @@ header {
   /* width: 10rem; */
   /* justify-content: space-around; */
   align-items: center;
+}
+
+#log-out {
+  text-decoration: none;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 header #action-buttons a {
@@ -90,8 +99,7 @@ main h1 {
   border-style: solid;
   border-color: transparent; */
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, scale 0.3s ease,
-    border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .chat-room:hover {
@@ -108,7 +116,7 @@ main h1 {
 
 .chat-room-contents {
   display: flex;
-  text-decoration: none;;
+  text-decoration: none;
   flex-direction: column;
   padding: 2rem;
   gap: 1rem;
