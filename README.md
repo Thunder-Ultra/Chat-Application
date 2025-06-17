@@ -3,10 +3,11 @@ An Simple Chat Application with End to End Security.
 
 
 ## TO DO
-- [ ] Implement user authentication
-- [ ] Add chat rooms
-- [ ] Implement chat history
-- [ ] Add responsive design
+- [ ] Automatically load messages sent by other users
+- [x] Allow users to create chat rooms
+
+
+
 
 ## How to run the project ?
 
