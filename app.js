@@ -4,6 +4,7 @@ const express = require("express");
 const db = require("./database/data.js");
 const { ObjectId } = require("mongodb");
 const session = require("express-session");
+const websocket = require("ws");
 const MongoDBStore = require("connect-mongodb-session")(session);
 
 // async function test() {
@@ -31,13 +32,13 @@ const app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 let sessionStorage = new MongoDBStore({
   uri: "mongodb://127.0.0.1:27017",
   databaseName: "chat-application",
 });
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(
   session({
     secret: "Have fun Developing",
@@ -47,18 +48,39 @@ app.use(
   })
 );
 
-function checkAuthentication(req, res, next) {
-  if (!req.session.isAuthenticated) {
-    console.log(req.method + req.path + " : Unauthorized Access!!");
-    // console.log(req)
-    return res.send("You Attacker! Go make your own chat app and hack it!");
-    // return res.redirect("/login");
-  }
-  next();
-}
+const wss = new websocket.WebSocketServer({ port: 3080 });
+
+wss.on("connection", function (ws) {
+  wss.on("error", console.error);
+
+  ws.on("message", async function (data) {
+    // Do Something when message is recived
+    // Make it so that the user id and group id
+    // linked to this socket, st we can send new
+    // messages to the client through this sokcet
+    // specific for that client and group
+    try {
+      let connectionDetails = await JSON.parse(data);
+
+      ws.data = {
+        userId: new ObjectId(connectionDetails.userId),
+        groupId: new ObjectId(connectionDetails.groupId),
+      };
+      // console.log(ws.data);
+
+      // console.log(ws.data);
+    } catch {
+      console.log("Failed parsing Data send for Initialization");
+      ws.close();
+    }
+  });
+
+  // I need to make sure that, we can send code from outside this block
+  // ws.send("");
+});
 
 app.get("/", function (req, res) {
-  res.redirect("/home");
+  res.redirect("/login");
 });
 
 app.get("/register", function (req, res) {
@@ -166,11 +188,21 @@ app.post("/login", async function (req, res) {
 
   // Generate session cookie and save session to database
   req.session.isAuthenticated = true;
-  req.session.username = storedUserData.username;
+  req.session.userName = storedUserData.username;
   req.session.userId = storedUserData._id;
 
   // Send successfull message
   res.json();
+});
+
+app.use(function checkAuthentication(req, res, next) {
+  if (!req.session.isAuthenticated) {
+    console.log(req.method + req.path + " : Unauthorized Access!!");
+    // console.log(req)
+    return res.send("You Attacker! Go make your own chat app and hack it!");
+    // return res.redirect("/login");
+  }
+  next();
 });
 
 app.get("/logout", function (req, res) {
@@ -181,7 +213,7 @@ app.get("/logout", function (req, res) {
   res.redirect("/login");
 });
 
-app.get("/home", checkAuthentication, async function (req, res) {
+app.get("/home", async function (req, res) {
   let groups;
 
   try {
@@ -194,7 +226,7 @@ app.get("/home", checkAuthentication, async function (req, res) {
   res.render("home", { groups: groups, username: req.session.username });
 });
 
-app.get("/chatroom/:id", checkAuthentication, async function (req, res) {
+app.get("/chatroom/:id", async function (req, res) {
   let groupId = req.params.id;
   let chats;
 
@@ -222,24 +254,27 @@ app.get("/chatroom/:id", checkAuthentication, async function (req, res) {
     console.log(err);
   }
 
+  // console.log("userName", req.session.userName);
+
   res.render("chat", {
     chats: chats.reverse(),
-    groupName: groupName,
     groupId: groupId,
+    groupName: groupName,
     userId: req.session.userId,
+    userName: req.session.userName,
   });
 });
 
 // Left to add
 // CSRF Protection
 // XSS Protection
-app.post("/chatroom/:id", checkAuthentication, async function (req, res) {
+app.post("/chatroom/:id", async function (req, res) {
   let body = await req.body;
 
-  let name = req.session.username;
+  let name = req.session.userName;
   let userId = req.session.userId;
   let text = body.text;
-  let groupId = req.params.id;
+  let groupId = new ObjectId(req.params.id);
 
   try {
     await db
@@ -260,6 +295,26 @@ app.post("/chatroom/:id", checkAuthentication, async function (req, res) {
       `post/chatroom/${groupId} : ERROR : Failed to save msg to database`
     );
     console.log(err);
+  }
+
+  const msgBlock = {
+    senderName: name,
+    msg: text,
+  };
+  const msgJSONString = JSON.stringify(msgBlock);
+
+  try {
+    // Send the message through correct socket
+    // Distinguish between sender and reciever messages
+    // console.log(userId);
+    wss.clients.forEach(async function (ws) {
+      if (ws.data.groupId.equals(groupId) && !ws.data.userId.equals(userId)) {
+        ws.send(msgJSONString);
+      }
+    });
+  } catch (err) {
+    console.err("Failed sending msg to all users through socket");
+    console.err(err);
   }
 });
 

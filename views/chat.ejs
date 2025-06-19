@@ -8,6 +8,7 @@
   </head>
   <body>
     <div id="chat-box">
+
       <div id="chat-title">
         <a id="back-button" href="/home">
           <!-- BACK BUTTON SVG -->
@@ -23,105 +24,24 @@
         </a>
         <h2><%= groupName %></h2>
       </div>
+
       <!-- 
         "flex-direction=column-reverse" is set so chats needs to be sent in reverse order in which they are stored.
-        -->
-        <div id="chats">
-          <% for (let i=0; i<chats.length; i++) { %>
-            <% if (chats[i].sender.id.equals(userId)) { %>          
-              <p class="sent"><%= chats[i].text %></p>
-            <% } else { %>
-              <div class="recieved">
-                <p class="sender-name"><%= chats[i].sender.name %></p>
-                <p class="text"><%= chats[i].text %></p>
-              </div>
-            <% } %>
+      -->
+      <div id="chats">
+        <% for (let i=0; i<chats.length; i++) { %>
+          <% if (chats[i].sender.id.equals(userId)) { %>          
+            <p class="sent"><%= chats[i].text %></p>
+          <% } else { %>
+            <div class="recieved">
+              <p class="sender-name"><%= chats[i].sender.name %></p>
+              <p class="text"><%= chats[i].text %></p>
+            </div>
           <% } %>
-        <!-- <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Hi
-          </p>
-        </div>
-        <p class="sent">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
-          dicta natus minus necessitatibus incidunt enim modi molestiae? Iure
-          soluta maiores nihil quos tempore quisquam recusandae minus illo,
-          aliquam dolorem velit!
-        </p>
-        <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Hi
-          </p>
-        </div>
-        <p class="sent">Hi</p>
-        <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
-            dicta natus minus necessitatibus incidunt enim modi molestiae? Iure
-            soluta maiores nihil quos tempore quisquam recusandae minus illo,
-            aliquam dolorem velit!
-          </p>
-        </div>
-        <p class="sent">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
-          dicta natus minus necessitatibus incidunt enim modi molestiae? Iure
-          soluta maiores nihil quos tempore quisquam recusandae minus illo,
-          aliquam dolorem velit!
-        </p>
-        <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Hi
-          </p>
-        </div>
-        <p class="sent">Hi</p>
-        <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
-            dicta natus minus necessitatibus incidunt enim modi molestiae? Iure
-            soluta maiores nihil quos tempore quisquam recusandae minus illo,
-            aliquam dolorem velit!
-          </p>
-        </div>
-        <p class="sent">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
-          dicta natus minus necessitatibus incidunt enim modi molestiae? Iure
-          soluta maiores nihil quos tempore quisquam recusandae minus illo,
-          aliquam dolorem velit!
-        </p>
-        <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Hi
-          </p>
-        </div>
-        <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Hi
-          </p>
-        </div>
-        <div class="recieved">
-          <p class="sender-name">Dima</p>
-          <p class="text">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
-            dicta natus minus necessitatibus incidunt enim modi molestiae? Iure
-            soluta maiores nihil quos tempore quisquam recusandae minus illo,
-            aliquam dolorem velit!
-          </p>
-        </div>
-        <p class="sent">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam
-          dicta natus minus necessitatibus incidunt enim modi molestiae? Iure
-          soluta maiores nihil quos tempore quisquam recusandae minus illo,
-          aliquam dolorem velit!
-        </p> -->
+        <% } %>
       </div>
-      <form id="user-input" action="/chatroom/<%= groupId %>">
+
+      <form id="user-input" data-group-id="<%= groupId %>" data-user-id="<%= userId %>" data-user-name="<%= userName %>">
         <!-- <div class="input-container"> -->
           <input type="text" placeholder="Type to Message" name="text" id="text" class="effect">
         <!-- </div> -->
@@ -140,6 +60,7 @@
           </svg>
         </button>
       </form>
+
     </div>
   </body>
 </html>
